@@ -14,9 +14,9 @@
 
 ```javascript
 const message = {
-  type: 'INCREMENT_VOTES',
+  type: 'ALGUN_TIPO_DE_MENSAJE',
   payload: {
-    id: 'un-identificador-de-un-partido',
+    id: 'un-identificador-de-un-item',
   },
 };
 ```
@@ -37,69 +37,9 @@ Ejemplo de mensaje:
 
 ```javascript
 const message = {
-  type: 'INCREMENT_VOTES',
+  type: 'ALGUN_TIPO_DE_MENSAJE',
   payload: {
-    id: 'un-identificador-de-un-partido',
+    id: 'un-identificador-de-un-item',
   },
 };
 ```
-
-### Tipos de mensaje (`MessageType`)
-
-- **GET_PARTIES**  
-  Solicita la lista de partidos políticos.  
-  **Payload:** _No es necesario, puede omitirse o ser un objeto vacío._
-
-- **ADD_PARTY**  
-  Agrega un nuevo partido político.  
-  **Payload:**
-
-  ```json
-  {
-    "name": "Nombre del partido",
-    "color": "#HEX", // o rgba
-    "borderColor": "#HEX" // o rgba
-  }
-  ```
-
-- **UPDATE_PARTY**  
-  Actualiza los datos de un partido existente.  
-  **Payload:**
-
-  ```json
-  {
-    "id": "id-del-partido", // este no se actualizará, solo se usa para identificar el partido
-    "name": "Nuevo nombre (opcional)",
-    "color": "#HEX (opcional)", // o rgba
-    "borderColor": "#HEX (opcional)" // o rgba
-  }
-  ```
-
-- **DELETE_PARTY**  
-  Elimina un partido por su ID.  
-  **Payload:**
-
-  ```json
-  {
-    "id": "id-del-partido"
-  }
-  ```
-
-- **INCREMENT_VOTES**  
-  Suma 1 voto al partido especificado.  
-  **Payload:**
-
-  ```json
-  {
-    "id": "id-del-partido"
-  }
-  ```
-
-- **DECREMENT_VOTES**  
-  Resta 1 voto al partido especificado.  
-  **Payload:**
-  ```json
-  {
-    "id": "id-del-partido"
-  }
-  ```
