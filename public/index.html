@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSockets Cliente</title>
+
+    <link rel="icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <h1>Status</h1>
+    <p id="status">Connecting</p>
+
+    <button id="btn-disconnect">Disconnect</button>
+    <button id="btn-connect">Connect</button>
+
+    <form id="message-form" style="display: none">
+      <h1>Messages</h1>
+      <input type="text" id="input-message" placeholder="Message" />
+      <button id="send">Send</button>
+    </form>
+
+    <ul id="messages"></ul>
+
+    <script>
+      // Crear cookies
+      const session = {
+        id: 1,
+        sessionId: 'Abc123',
+      };
+      const jwtToken = 'MiToken-JWT';
+      document.cookie = `session=${JSON.stringify(session)}`;
+      document.cookie = `X-Token=${jwtToken}`;
+
+      let socket;
+
+      const status = document.querySelector('#status');
+      const messageForm = document.querySelector('#message-form');
+      const messageInput = document.querySelector('#input-message');
+      const messagesContainer = document.querySelector('#messages');
+
+      const btnDisconnect = document.querySelector('#btn-disconnect');
+      const btnConnect = document.querySelector('#btn-connect');
+
+      const createWebSocket = () => {
+        const channelId = 'mi-canal-personalizado';
+
+        const socket = new WebSocket(
+          `ws://localhost:3200?channelId=${channelId}`
+        );
+
+        socket.onopen = () => {
+          console.log('WebSocket conectado');
+          messageForm.style.display = 'block';
+          status.textContent = 'Conectado';
+        };
+
+        socket.onclose = () => {
+          console.log('WebSocket desconectado');
+          messageForm.style.display = 'none';
+          status.textContent = 'Desconectado';
+        };
+
+        socket.onerror = (event) => {
+          console.log({ error: event });
+        };
+
+        socket.onmessage = (event) => {
+          // console.log(event.data);
+          showMessage(event.data);
+        };
+
+        return socket;
+      };
+
+      socket = createWebSocket();
+
+      btnDisconnect.addEventListener('click', () => {
+        if (socket.readyState !== WebSocket.OPEN) return;
+        socket.close();
+      });
+
+      btnConnect.addEventListener('click', () => {
+        if (socket.readyState === WebSocket.OPEN) return;
+        socket = createWebSocket();
+      });
+
+      messageForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (!messageInput.value && messageInput.value.length === 0) return;
+
+        socket.send(messageInput.value);
+        // showMessage(messageInput.value);
+        messageInput.value = '';
+      });
+
+      const showMessage = (message) => {
+        const pre = document.createElement('pre');
+        pre.innerHTML = JSON.stringify(JSON.parse(message), null, 2);
+
+        messagesContainer.prepend(pre);
+      };
+    </script>
+  </body>
+</html>
