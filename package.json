@@ -1,5 +1,5 @@
 {
-  "name": "02-political-parties",
+  "name": "bun-websocket-server",
   "module": "index.ts",
   "type": "module",
   "private": true,
